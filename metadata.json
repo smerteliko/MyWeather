@@ -1,0 +1,12 @@
+{
+  "name": "MyWeather",
+  "description": "Weather from open weather map",
+  "uuid": "myweather",
+  "shell-version": [
+    "42"
+  ],
+  "url": "",
+  "version": 1,
+  "settings-schema": "org.gnome.shell.extensions.myweather",
+  "gettext-domain": "myweather"
+}
