@@ -211,7 +211,7 @@ function populateCurrentUI() {
                 comment = WeatherUtils.getWeatherCondition(json.weather[0].id);
 
             let location              = this.extractLocation(this.city);
-            let temperature           = WeatherUtils.formatTemperature(json.main.temp);
+            let temperature           = WeatherUtils.formatTemperature(json.main.temp, this.units, this.decimalPlaces);
             let sunrise         = new Date(json.sys.sunrise * 1000);
             let sunset          = new Date(json.sys.sunset * 1000);
             let now             = new Date();
@@ -254,17 +254,25 @@ function populateCurrentUI() {
 
             }
 
-            this.currentWeatherFeelsLike.text   = WeatherUtils.formatTemperature(json.main.feels_like, this.units, this.decimalPlaces);
+            this.currentWeatherFeelsLike.text   = WeatherUtils.formatTemperature(
+                                                                                    json.main.feels_like,
+                                                                                    this.units,
+                                                                                    this.decimalPlaces
+            );
 
             this.currentWeatherHumidity.text    = json.main.humidity + ' %';
-            this.currentWeatherPressure.text    = WeatherUtils.formatPressure(json.main.pressure, this.pressureUnits, this.decimalPlaces);
+            this.currentWeatherPressure.text    = WeatherUtils.formatPressure(
+                                                                                json.main.pressure,
+                                                                                this.pressureUnits,
+                                                                                this.decimalPlaces
+            );
             this.currentWeatherSunrise.text     = sunrise;
             this.currentWeatherSunset.text      = sunset;
             this.currentWeatherBuild.text       = lastBuild;
 
             if (json.wind != undefined && json.wind.deg != undefined) {
                 this.currentWeatherWind.text = WeatherUtils.formatWind(json.wind.speed,
-                    WeatherUtils.getWindDirection(json.wind.deg),
+                    WeatherUtils.getWindDirection(json.wind.deg, this.windDirection),
                     this.decimalPlaces,
                     this.windSpeedUnits
                 );

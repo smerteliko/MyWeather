@@ -372,7 +372,7 @@ function formatPressure(pressure, units, decimalPlaces) {
     let pressureUnit = _('hPa');
     switch (units) {
         case WeatherPressureUnits.INHG:
-            pressure = this.toInHg(pressure);
+            pressure = this.toInHg(pressure,decimalPlaces);
             pressureUnit = _("inHg");
             break;
 
@@ -439,7 +439,7 @@ function formatPressure(pressure, units, decimalPlaces) {
 function formatTemperature(temperature, units, decimalPlaces) {
     switch (units) {
         case WeatherUnits.FAHRENHEIT:
-            temperature = this.toFahrenheit(temperature);
+            temperature = this.toFahrenheit(temperature, decimalPlaces);
             break;
 
         case WeatherUnits.CELSIUS:
@@ -447,30 +447,30 @@ function formatTemperature(temperature, units, decimalPlaces) {
             break;
 
         case WeatherUnits.KELVIN:
-            temperature = this.toKelvin(temperature);
+            temperature = this.toKelvin(temperature, decimalPlaces);
             break;
 
         case WeatherUnits.RANKINE:
-            temperature = this.toRankine(temperature);
+            temperature = this.toRankine(temperature, decimalPlaces);
             break;
 
         case WeatherUnits.REAUMUR:
-            temperature = this.toReaumur(temperature);
+            temperature = this.toReaumur(temperature, decimalPlaces);
             break;
 
         case WeatherUnits.ROEMER:
-            temperature = this.toRoemer(temperature);
+            temperature = this.toRoemer(temperature, decimalPlaces);
             break;
 
         case WeatherUnits.DELISLE:
-            temperature = this.toDelisle(temperature);
+            temperature = this.toDelisle(temperature, decimalPlaces);
             break;
 
         case WeatherUnits.NEWTON:
-            temperature = this.toNewton(temperature);
+            temperature = this.toNewton(temperature, decimalPlaces);
             break;
     }
-    return parseFloat(temperature).toLocaleString(this.locale).replace('-', '\u2212') + ' ' + unitToUnicode();
+    return parseFloat(temperature).toLocaleString(this.locale).replace('-', '\u2212') + ' ' + unitToUnicode(units);
 }
 
 /**

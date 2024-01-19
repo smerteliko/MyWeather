@@ -935,7 +935,7 @@ class WeatherExt extends PanelMenu.Button {
         let menuAlignment = 1.0 - (this.menuAlignment / 100);
         if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL)
             menuAlignment = 1.0 - menuAlignment;
-        this.menu.arrowAlignment=menuAlignment;
+        this.menu._arrowAlignment=menuAlignment;
     }
 
     checkPositionInPanel() {
