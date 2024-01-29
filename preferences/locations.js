@@ -501,7 +501,7 @@ var SearchResultsWindow = GObject.registerClass(
                 };
                 let osmUrl = 'https://nominatim.openstreetmap.org/search';
                 try {
-                    json = await this.LocloadJsonAsync(osmUrl, params)
+                    json = await this.loadJsonAsync(osmUrl, params)
                         .then(async (json) => {
                             try {
                                 if (!json) {
@@ -521,50 +521,12 @@ var SearchResultsWindow = GObject.registerClass(
                         });
                 }
                 catch (e) {
-                    log("_findLocation OpenStreetMap error: " + e);
+                    log("findLocation OpenStreetMap error: " + e);
                 }
             }
             return 0;
         }
 
-        /**
-         *
-         * @param url
-         * @param params
-         * @returns {Promise<unknown>}
-         * @constructor
-         */
-        LocloadJsonAsync(url, params) {
-            return new Promise((resolve, reject) => {
-                // Create user-agent string from uuid and the version
-                let _userAgent = Me.metadata.uuid;
-                if (Me.metadata.version !== undefined && Me.metadata.version.toString().trim() !== '') {
-                    _userAgent += '/';
-                    _userAgent += Me.metadata.version.toString();
-                }
-
-                let _httpSession = new Soup.Session();
-                // add trailing space, so libsoup adds its own user-agent
-                _httpSession.user_agent = _userAgent + ' ';
-
-                let message = Soup.form_request_new_from_hash('GET', url, params);
-
-                _httpSession.queue_message(message, function(_httpSession, message) {
-                    try {
-                        if (!message.response_body.data) {
-                            return;
-                        }
-                        let jp = JSON.parse(message.response_body.data);
-                        resolve(jp)
-                    } catch (e) {
-                        _httpSession.abort();
-                        reject(e);
-
-                    }
-                });
-            });
-
-        }
 
         /**
          *

@@ -228,7 +228,7 @@ class WeatherExt extends PanelMenu.Button {
             this.processTodaysData = Weather.processTodaysData;
             this.processForecastData = Weather.processForecastData;
         }
-        this.loadJsonAsync = Weather.loadJsonAsync;
+        this.loadJsonAsync = WeatherUtils.loadJsonAsync;
         this.weatherProvider = "OpenWeatherMap";
 
         if (this.appid.toString().trim() === '')

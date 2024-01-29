@@ -398,47 +398,7 @@ function populateForecastUI() {
     });
 }
 
-/**
- *
- * @param url
- * @param params
- * @returns {Promise<unknown>}
- */
-function loadJsonAsync(url, params) {
-    return new Promise((resolve, reject) => {
 
-        // Create user-agent string from uuid and (if present) the version
-        let userAgent = Me.metadata.uuid;
-        if (Me.metadata.version !== undefined && Me.metadata.version.toString().trim() !== '') {
-            userAgent += '/';
-            userAgent += Me.metadata.version.toString();
-        }
-
-        let httpSession = new Soup.Session();
-        let paramsHash = Soup.form_encode_hash(params);
-        let message = Soup.Message.new_from_encoded_form('GET', url, paramsHash);
-        // add trailing space, so libsoup adds its own user-agent
-        httpSession.user_agent = userAgent + ' ';
-
-        httpSession.send_and_read_async(message, GLib.PRIORITY_DEFAULT, null, (httpSession, message) => {
-
-            let jsonString = httpSession.send_and_read_finish(message).get_data();
-            if (jsonString instanceof Uint8Array) {
-                jsonString = ByteArray.toString(jsonString);
-            }
-            try {
-                if (!jsonString) {
-                    throw new Error("No data in response body");
-                }
-                resolve(JSON.parse(jsonString));
-            }
-            catch (e) {
-                httpSession.abort();
-                reject(e);
-            }
-        });
-    });
-}
 
 /**
  *

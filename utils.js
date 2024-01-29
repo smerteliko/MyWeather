@@ -1,44 +1,52 @@
+const { Soup, GLib } = imports.gi;
+const ByteArray = imports.byteArray;
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
+const _ = Gettext.gettext;
+
+
 var WeatherProvider = {
     OPENWEATHERMAP: 0
 };
 var WeatherUnits = {
-    CELSIUS: 0,
-    FAHRENHEIT: 1,
-    KELVIN: 2,
-    RANKINE: 3,
-    REAUMUR: 4,
-    ROEMER: 5,
-    DELISLE: 6,
-    NEWTON: 7
+    CELSIUS:        0,
+    FAHRENHEIT:     1,
+    KELVIN:         2,
+    RANKINE:        3,
+    REAUMUR:        4,
+    ROEMER:         5,
+    DELISLE:        6,
+    NEWTON:         7
 };
 var WeatherWindSpeedUnits = {
-    KPH: 0,
-    MPH: 1,
-    MPS: 2,
-    KNOTS: 3,
-    FPS: 4,
-    BEAUFORT: 5
+    KPH:        0,
+    MPH:        1,
+    MPS:        2,
+    KNOTS:      3,
+    FPS:        4,
+    BEAUFORT:   5
 };
 
 
 var WeatherPressureUnits = {
-    HPA: 0,
-    INHG: 1,
-    BAR: 2,
-    PA: 3,
-    KPA: 4,
-    ATM: 5,
-    AT: 6,
-    TORR: 7,
-    PSI: 8,
-    MMHG: 9,
-    MBAR: 10
+    HPA:    0,
+    INHG:   1,
+    BAR:    2,
+    PA:     3,
+    KPA:    4,
+    ATM:    5,
+    AT:     6,
+    TORR:   7,
+    PSI:    8,
+    MMHG:   9,
+    MBAR:   10
 };
 
 var WeatherPosition = {
-    CENTER: 0,
-    RIGHT: 1,
-    LEFT: 2
+    CENTER:     0,
+    RIGHT:      1,
+    LEFT:       2
 };
 
 
@@ -71,117 +79,62 @@ var IconMap = {
  * @returns {*}
  */
 function getWeatherCondition(code) {
-    switch (parseInt(code, 10)) {
-        case 200: //Thunderstorm with light rain
-            return _('Thunderstorm with Light Rain');
-        case 201: //Thunderstorm with rain
-            return _('Thunderstorm with Rain');
-        case 202: //Thunderstorm with heavy rain
-            return _('Thunderstorm with Heavy Rain');
-        case 210: //Light thunderstorm
-            return _('Light Thunderstorm');
-        case 211: //Thunderstorm
-            return _('Thunderstorm');
-        case 212: //Heavy thunderstorm
-            return _('Heavy Thunderstorm');
-        case 221: //Ragged thunderstorm
-            return _('Ragged Thunderstorm');
-        case 230: //Thunderstorm with light drizzle
-            return _('Thunderstorm with Light Drizzle');
-        case 231: //Thunderstorm with drizzle
-            return _('Thunderstorm with Drizzle');
-        case 232: //Thunderstorm with heavy drizzle
-            return _('Thunderstorm with Heavy Drizzle');
-        case 300: //Light intensity drizzle
-            return _('Light Drizzle');
-        case 301: //Drizzle
-            return _('Drizzle');
-        case 302: //Heavy intensity drizzle
-            return _('Heavy Drizzle');
-        case 310: //Light intensity drizzle rain
-            return _('Light Drizzle Rain');
-        case 311: //Drizzle rain
-            return _('Drizzle Rain');
-        case 312: //Heavy intensity drizzle rain
-            return _('Heavy Drizzle Rain');
-        case 313: //Shower rain and drizzle
-            return _('Shower Rain and Drizzle');
-        case 314: //Heavy shower rain and drizzle
-            return _('Heavy Rain and Drizzle');
-        case 321: //Shower drizzle
-            return _('Shower Drizzle');
-        case 500: //Light rain
-            return _('Light Rain');
-        case 501: //Moderate rain
-            return _('Moderate Rain');
-        case 502: //Heavy intensity rain
-            return _('Heavy Rain');
-        case 503: //Very heavy rain
-            return _('Very Heavy Rain');
-        case 504: //Extreme rain
-            return _('Extreme Rain');
-        case 511: //Freezing rain
-            return _('Freezing Rain');
-        case 520: //Light intensity shower rain
-            return _('Light Shower Rain');
-        case 521: //Shower rain
-            return _('Shower Rain');
-        case 522: //Heavy intensity shower rain
-            return _('Heavy Shower Rain');
-        case 531: //Ragged shower rain
-            return _('Ragged Shower Rain');
-        case 600: //Light snow
-            return _('Light Snow');
-        case 601: //Snow
-            return _('Snow');
-        case 602: //Heavy snow
-            return _('Heavy Snow');
-        case 611: //Sleet
-            return _('Sleet');
-        case 612: //Light shower sleet
-            return _('Light Shower Sleet');
-        case 613: //Shower sleet
-            return _('Shower Sleet');
-        case 615: //Light rain and snow
-            return _('Light Rain and Snow');
-        case 616: //Rain and snow
-            return _('Rain and Snow');
-        case 620: //Light shower snow
-            return _('Light Shower Snow');
-        case 621: //Shower snow
-            return _('Shower Snow');
-        case 622: //Heavy shower snow
-            return _('Heavy Shower Snow');
-        case 701: //Mist
-            return _('Mist');
-        case 711: //Smoke
-            return _('Smoke');
-        case 721: //Haze
-            return _('Haze');
-        case 731: //Sand/Dust Whirls
-            return _('Sand/Dust Whirls');
-        case 741: //Fog
-            return _('Fog');
-        case 751: //Sand
-            return _('Sand');
-        case 761: //Dust
-            return _('Dust');
-        case 762: //volcanic ash
-            return _('Volcanic Ash');
-        case 771: //squalls
-            return _('Squalls');
-        case 781: //tornado
-            return _('Tornado');
-        case 800: //clear sky
-            return _('Clear Sky');
-        case 801: //Few clouds
-            return _('Few Clouds');
-        case 802: //Scattered clouds
-            return _('Scattered Clouds');
-        case 803: //Broken clouds
-            return _('Broken Clouds');
-        case 804: //Overcast clouds
-            return _('Overcast Clouds');
+    switch (parseInt(code, 10)) {                              /**  CODE   |  DESCRIPTION                      */
+        case 200: return _('Thunderstorm with Light Rain');         /**  200    |  Thunderstorm with light rain     */
+        case 201: return _('Thunderstorm with Rain');               /**  201    |  Thunderstorm with rain           */
+        case 202: return _('Thunderstorm with Heavy Rain');         /**  202    |  Thunderstorm with heavy rain     */
+        case 210: return _('Light Thunderstorm');                   /**  210    |  Light thunderstorm               */
+        case 211: return _('Thunderstorm');                         /**  211    |  Thunderstorm                     */
+        case 212: return _('Heavy Thunderstorm');                   /**  212    |  Heavy thunderstorm               */
+        case 221: return _('Ragged Thunderstorm');                  /**  221    |  Ragged thunderstorm              */
+        case 230: return _('Thunderstorm with Light Drizzle');      /**  230    |  Thunderstorm with light drizzle  */
+        case 231: return _('Thunderstorm with Drizzle');            /**  231    |  Thunderstorm with drizzle        */
+        case 232: return _('Thunderstorm with Heavy Drizzle');      /**  232    |  Thunderstorm with heavy drizzle  */
+        case 300: return _('Light Drizzle');                        /**  300    |  Light intensity drizzle          */
+        case 301: return _('Drizzle');                              /**  301    |  Drizzle                          */
+        case 302: return _('Heavy Drizzle');                        /**  302    |  Heavy intensity drizzle          */
+        case 310: return _('Light Drizzle Rain');                   /**  310    |  Light intensity drizzle rain     */
+        case 311: return _('Drizzle Rain');                         /**  311    |  Drizzle rain                     */
+        case 312: return _('Heavy Drizzle Rain');                   /**  312    |  Heavy intensity drizzle rain     */
+        case 313: return _('Shower Rain and Drizzle');              /**  313    |  Shower rain and drizzle          */
+        case 314: return _('Heavy Rain and Drizzle');               /**  314    |  Heavy shower rain and drizzle    */
+        case 321: return _('Shower Drizzle');                       /**  321    |  Shower drizzle                   */
+        case 500: return _('Light Rain');                           /**  500    |  Light rain                       */
+        case 501: return _('Moderate Rain');                        /**  501    |  Moderate rain                    */
+        case 502: return _('Heavy Rain');                           /**  502    |  Heavy intensity rain             */
+        case 503: return _('Very Heavy Rain');                      /**  503    |  Very heavy rain                  */
+        case 504: return _('Extreme Rain');                         /**  504    |  Extreme rain                     */
+        case 511: return _('Freezing Rain');                        /**  511    |  Freezing rain                    */
+        case 520: return _('Light Shower Rain');                    /**  520    |  Light intensity shower rain      */
+        case 521: return _('Shower Rain');                          /**  521    |  Shower rain                      */
+        case 522: return _('Heavy Shower Rain');                    /**  522    |  Heavy intensity shower rain      */
+        case 531: return _('Ragged Shower Rain');                   /**  531    |  Ragged shower rain               */
+        case 600: return _('Light Snow');                           /**  600    |  Light snow                       */
+        case 601: return _('Snow');                                 /**  601    |  Snow                             */
+        case 602: return _('Heavy Snow');                           /**  602    |  Heavy snow                       */
+        case 611: return _('Sleet');                                /**  611    |  Sleet                            */
+        case 612: return _('Light Shower Sleet');                   /**  612    |  Light shower sleet               */
+        case 613: return _('Shower Sleet');                         /**  613    |  Shower sleet                     */
+        case 615: return _('Light Rain and Snow');                  /**  615    |  Light rain and snow              */
+        case 616: return _('Rain and Snow');                        /**  616    |  Rain and snow                    */
+        case 620: return _('Light Shower Snow');                    /**  620    |  Light shower snow                */
+        case 621: return _('Shower Snow');                          /**  621    |  Shower snow                      */
+        case 622: return _('Heavy Shower Snow');                    /**  621    |  Heavy shower snow                */
+        case 701: return _('Mist');                                 /**  701    |  Mist                             */
+        case 711: return _('Smoke');                                /**  711    |  Smoke                            */
+        case 721: return _('Haze');                                 /**  721    |  Haze                             */
+        case 731: return _('Sand/Dust Whirls');                     /**  731    |  Sand/Dust Whirls                 */
+        case 741: return _('Fog');                                  /**  741    |  Fog                              */
+        case 751: return _('Sand');                                 /**  751    |  Sand                             */
+        case 761: return _('Dust');                                 /**  761    |  Dust                             */
+        case 762: return _('Volcanic Ash');                         /**  762    |  Volcanic ash                     */
+        case 771: return _('Squalls');                              /**  771    |  Squalls                          */
+        case 781: return _('Tornado');                              /**  781    |  Tornado                          */
+        case 800: return _('Clear Sky');                            /**  800    |  Clear sky                        */
+        case 801: return _('Few Clouds');                           /**  801    |  Few clouds                       */
+        case 802: return _('Scattered Clouds');                     /**  802    |  Scattered clouds                 */
+        case 803: return _('Broken Clouds');                        /**  803    |  Broken clouds                    */
+        case 804: return _('Overcast Clouds');                      /**  804    |  Overcast clouds                  */
         default:
             return _('Not available');
     }
@@ -519,12 +472,53 @@ function formatWind(speed, direction, decimalPlaces, speedUnits) {
             break;
     }
 
-    if (!speed)
+    if (!speed) {
         return '\u2013';
-    else if (speed === 0 || !direction)
+    }
+
+    if (speed === 0 || !direction) {
         return parseFloat(speed).toLocaleString(this.locale) + ' ' + unit;
-    else // i.e. speed > 0 && direction
-        return direction + ' ' + parseFloat(speed).toLocaleString(this.locale) + ' ' + unit;
+    }
+
+    // i.e. speed > 0 && direction
+    return direction + ' ' + parseFloat(speed).toLocaleString(this.locale) + ' ' + unit;
+}
+
+/**
+ *
+ * @param url
+ * @param params
+ * @returns {Promise<unknown>}
+ */
+function loadJsonAsync(url, params) {
+    return new Promise((resolve, reject) => {
+        // Create user-agent string from uuid and the version
+        let userAgent = Me.metadata.uuid;
+        if (Me.metadata.version !== undefined && Me.metadata.version.toString().trim() !== '') {
+            userAgent += '/';
+            userAgent += Me.metadata.version.toString();
+        }
+
+        let httpSession = new Soup.Session();
+        // add trailing space, so libsoup adds its own user-agent
+        httpSession.user_agent = userAgent + ' ';
+
+        let message = Soup.form_request_new_from_hash('GET', url, params);
+
+        httpSession.queue_message(message, function(httpSession, message) {
+            try {
+                if (!message.response_body.data) {
+                    return;
+                }
+                let jp = JSON.parse(message.response_body.data);
+                resolve(jp)
+            } catch (e) {
+                httpSession.abort();
+                reject(e);
+
+            }
+        });
+    });
 }
 
 
