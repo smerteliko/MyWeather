@@ -224,8 +224,8 @@ var General = GObject.registerClass(
                 activatable_widget: personalApiKeyEntry
             });
             let personalApiKey = this.settings.get_string('appid');
-            if (personalApiKey != ''){
-                if (personalApiKey.length != 32) {
+            if (personalApiKey !== ''){
+                if (personalApiKey.length !== 32) {
                     personalApiKeyEntry.set_icon_from_icon_name(Gtk.PositionType.LEFT, 'dialog-warning');
                 } else {
                     personalApiKeyEntry.set_icon_from_icon_name(Gtk.PositionType.LEFT, '');
@@ -285,13 +285,13 @@ var General = GObject.registerClass(
                 this.settings.set_boolean('use-default-owm-key', widget.get_active());
             });
             personalApiKeyEntry.connect("notify::text", (widget) => {
-                if (widget.text.length == 32) {
+                if (widget.text.length === 32) {
                     this.settings.set_string('appid', widget.text);
                     personalApiKeyEntry.set_icon_from_icon_name(Gtk.PositionType.LEFT, '');
                 }
                 else {
                     personalApiKeyEntry.set_icon_from_icon_name(Gtk.PositionType.LEFT, 'dialog-warning');
-                    if (widget.text.length == 0) {
+                    if (widget.text.length === 0) {
                         this.settings.set_string('appid', '');
                     }
                 }

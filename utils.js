@@ -146,19 +146,19 @@ function getWeatherCondition(code) {
  * @returns {*}
  */
 function unitToUnicode(units) {
-    if (units == WeatherUnits.FAHRENHEIT)
+    if (units === WeatherUnits.FAHRENHEIT)
         return _('\u00B0F');
-    else if (units == WeatherUnits.KELVIN)
+    else if (units === WeatherUnits.KELVIN)
         return _('K');
-    else if (units == WeatherUnits.RANKINE)
+    else if (units === WeatherUnits.RANKINE)
         return _('\u00B0Ra');
-    else if (units == WeatherUnits.REAUMUR)
+    else if (units === WeatherUnits.REAUMUR)
         return _('\u00B0R\u00E9');
-    else if (units == WeatherUnits.ROEMER)
+    else if (units === WeatherUnits.ROEMER)
         return _('\u00B0R\u00F8');
-    else if (units == WeatherUnits.DELISLE)
+    else if (units === WeatherUnits.DELISLE)
         return _('\u00B0De');
-    else if (units == WeatherUnits.NEWTON)
+    else if (units === WeatherUnits.NEWTON)
         return _('\u00B0N');
     else
         return _('\u00B0C');

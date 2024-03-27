@@ -56,7 +56,7 @@ var Locations = GObject.registerClass(
             let _city = this.settings.get_string('city');
 
             // Check if the location list UI needs updating
-            if (this.locListUi != _city) {
+            if (this.locListUi !== _city) {
                 if (_city.length > 0) {
 
                     // Remove the old list
@@ -67,7 +67,7 @@ var Locations = GObject.registerClass(
                         this.count = null;
                     }
                     let city = String(_city).split(" && ");
-                    if (city && typeof city == "string") {
+                    if (city && typeof city === "string") {
                         city = [city];
                     }
                     this.location = {};
@@ -97,7 +97,7 @@ var Locations = GObject.registerClass(
                         this.location[i].Row = new Adw.ActionRow({
                             title: this.extractLocation(city[i]),
                             subtitle: this.extractCoord(city[i]),
-                            icon_name: (i == this.actualCity) ? 'checkbox-checked-symbolic' : 'checkbox-symbolic',
+                            icon_name: (i === this.actualCity) ? 'checkbox-checked-symbolic' : 'checkbox-symbolic',
                             activatable: true
                         });
                         this.location[i].ButtonBox.append(this.location[i].EditButton);
@@ -114,7 +114,7 @@ var Locations = GObject.registerClass(
                             this.deleteLocation(i);
                         });
                         this.location[i].Row.connect('activated', () => {
-                            if (i != this.actualCity) {
+                            if (i !== this.actualCity) {
                                 this.location[i].Row.set_icon_name('checkbox-checked-symbolic');
                                 this.location[this.actualCity].Row.set_icon_name('checkbox-symbolic');
                                 this.actualCity = i;
@@ -191,7 +191,7 @@ var Locations = GObject.registerClass(
 
             // Bind signals
             dialog.connect('response', (w, response) => {
-                if (response == 0) {
+                if (response === 0) {
                     let location = findEntry.get_text().trim();
                     if (location === "") {
                         // no input
@@ -301,7 +301,7 @@ var Locations = GObject.registerClass(
                 widget.set_text("");
             });
             dialog.connect('response', (w, response) => {
-                if (response == 0) {
+                if (response === 0) {
                     let location = editNameEntry.get_text();
                     let coord = editCoordEntry.get_text();
                     let provider = 0; // preserved for future use
@@ -313,7 +313,7 @@ var Locations = GObject.registerClass(
                         this.window.add_toast(_toast);
                         return 0;
                     }
-                    if (city.length > 0 && typeof city != "object") {
+                    if (city.length > 0 && typeof city !== "object") {
                         city = [city];
                     }
                     city[selected] = coord + ">" + location + ">" + provider;
@@ -376,11 +376,11 @@ var Locations = GObject.registerClass(
             dialog.show();
 
             dialog.connect('response', (w, response) => {
-                if (response == 1) {
+                if (response === 1) {
                     if (city.length === 0) {
                         city = [];
                     }
-                    if (city.length > 0 && typeof city != "object") {
+                    if (city.length > 0 && typeof city !== "object") {
                         city = [city];
                     }
                     if (city.length > 0) {
@@ -411,7 +411,7 @@ var Locations = GObject.registerClass(
         }
         locationsChanged() {
             let city = this.settings.get_string('city');
-            if (this.locListUi != city) {
+            if (this.locListUi !== city) {
                 return true;
             }
             return false;
@@ -420,7 +420,7 @@ var Locations = GObject.registerClass(
             if (!arguments[0]) {
                 return "";
             }
-            if (arguments[0].search(">") == -1) {
+            if (arguments[0].search(">") === -1) {
                 return _("Invalid city");
             }
             return arguments[0].split(">")[1].trim();
@@ -429,7 +429,7 @@ var Locations = GObject.registerClass(
             if (!arguments[0]) {
                 return 0;
             }
-            if (arguments[0].search(">") == -1) {
+            if (arguments[0].search(">") === -1) {
                 return 0;
             }
             return arguments[0].split(">")[0];
@@ -493,7 +493,7 @@ var SearchResultsWindow = GObject.registerClass(
         async findLocation() {
             let json = null;
             // OpenStreetMaps
-            if (this.provider == GeolocationProvider.OPENSTREETMAPS) {
+            if (this.provider === GeolocationProvider.OPENSTREETMAPS) {
                 let params = {
                     format: 'json',
                     addressdetails: '1',

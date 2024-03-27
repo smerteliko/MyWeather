@@ -94,7 +94,7 @@ class WeatherExt extends PanelMenu.Button {
         this.menu.connect('open-state-changed', this.recalcLayout.bind(this));
 
         let firstBootWait = this.startupDelay;
-        if (firstBoot && firstBootWait != 0) {
+        if (firstBoot && firstBootWait !== 0) {
             // Delay popup initialization and data fetch on the first
             // extension load, ie: first log in / restart gnome shell
             this.timeoutFirstBoot = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, firstBootWait, () => {
@@ -124,7 +124,7 @@ class WeatherExt extends PanelMenu.Button {
             this.currentForecast = new PopupMenu.PopupBaseMenuItem({
                 reactive: false
             });
-            if (this.forecastDays != 0) {
+            if (this.forecastDays !== 0) {
                 this.forecastExpander = new PopupMenu.PopupSubMenuMenuItem("");
             }
         }
@@ -132,9 +132,9 @@ class WeatherExt extends PanelMenu.Button {
             reactive: false,
             style_class: 'myweather-menu-button-container'
         });
-        this.selectCity = new PopupMenu.PopupSubMenuMenuItem("PopupSubMenuMenuItemCity");
+        this.selectCity = new PopupMenu.PopupSubMenuMenuItem("");
         this.selectCity.actor.set_height(0);
-        this.selectCity._triangle.set_height(0);
+        this.selectCity._triangle.set_height(10);
 
         this.rebuildCurrentWeatherUi();
         this.rebuildFutureWeatherUi();
@@ -144,24 +144,21 @@ class WeatherExt extends PanelMenu.Button {
         this.menu.addMenuItem(this.currentWeather);
         if (!this.isForecastDisabled) {
             this.menu.addMenuItem(this.currentForecast);
-            if (this.forecastDays != 0) {
+            if (this.forecastDays !== 0) {
                 this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
                 this.menu.addMenuItem(this.forecastExpander);
             }
         }
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         this.menu.addMenuItem(this.buttonMenu);
+
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         this.menu.addMenuItem(this.selectCity);
         this.checkAlignment();
     }
 
     onStatusChanged(status) {
-        this.idle = false;
-
-        if (status == GnomeSession.PresenceStatus.IDLE) {
-            this.idle = true;
-        }
+        this.idle = status === GnomeSession.PresenceStatus.IDLE;
     }
 
     stop() {
@@ -255,7 +252,7 @@ class WeatherExt extends PanelMenu.Button {
 
         // Get locale
         this.locale = GLib.get_language_names()[0];
-        if (this.locale.indexOf('_') != -1)
+        if (this.locale.indexOf('_') !== -1)
             this.locale = this.locale.split("_")[0];
         else  // Fallback for 'C', 'C.UTF-8', and unknown locales.
             this.locale = 'ru';
@@ -304,7 +301,7 @@ class WeatherExt extends PanelMenu.Button {
                     });
                     return;
                 }
-                if (this.forecastDays != this.daysForecast) {
+                if (this.forecastDays !== this.daysForecast) {
                     let oldDays = this.forecastDays;
                     let newDays = this.daysForecast;
                     this.forecastDays = newDays;
@@ -328,7 +325,7 @@ class WeatherExt extends PanelMenu.Button {
                         return;
                     }
                 }
-                if (this.providerTranslations != this.translationsProvider) {
+                if (this.providerTranslations !== this.translationsProvider) {
                     this.providerTranslations = this.translationsProvider;
                     if (this.providerTranslations) {
                         this.showRefreshing();
@@ -387,11 +384,11 @@ class WeatherExt extends PanelMenu.Button {
     checkConnectionStateRetry() {
         if (this.checkConnectionStateRetries > 0) {
             let timeout;
-            if (this.checkConnectionStateRetries == 3)
+            if (this.checkConnectionStateRetries === 3)
                 timeout = 10000;
-            else if (this.checkConnectionStateRetries == 2)
+            else if (this.checkConnectionStateRetries === 2)
                 timeout = 30000;
-            else if (this.checkConnectionStateRetries == 1)
+            else if (this.checkConnectionStateRetries === 1)
                 timeout = 60000;
 
             this.checkConnectionStateRetries -= 1;
@@ -456,25 +453,19 @@ class WeatherExt extends PanelMenu.Button {
     }
 
     disableForecastChanged() {
-        if (this.isForecastDisabled != this.disableForecast) {
-            return true;
-        }
-        return false;
+        return this.isForecastDisabled !== this.disableForecast;
+
     }
 
     locationChanged() {
         let location = this.extractCoord(this.city);
-        if (this.currentLocation != location) {
-            return true;
-        }
-        return false;
+        return this.currentLocation !== location;
+
     }
 
     menuAlignmentChanged() {
-        if (this.currentAlignment != this.menuAlignment) {
-            return true;
-        }
-        return false;
+        return this.currentAlignment !== this.menuAlignment;
+
     }
 
     get clockFormat() {
@@ -490,7 +481,7 @@ class WeatherExt extends PanelMenu.Button {
         // if (!this._settings)
         //     this.loadConfig();
         // let provider = this.extractProvider(this._city);
-        // if (provider == WeatherProvider.DEFAULT)
+        // if (provider === WeatherProvider.DEFAULT)
         //     provider = this._settings.get_enum('weather-provider');
         // return provider;
     }
@@ -544,7 +535,7 @@ class WeatherExt extends PanelMenu.Button {
         let acCity = this.settings.get_int('actual-city');
         let cities = this.cities.split(" && ");
 
-        if (typeof cities != "object") {
+        if (typeof cities !== "object") {
             cities = [cities];
         }
 
@@ -571,7 +562,7 @@ class WeatherExt extends PanelMenu.Button {
         }
         let cities = this.cities.split(" && ");
 
-        if (typeof cities != "object") {
+        if (typeof cities !== "object") {
             cities = [cities];
         }
 
@@ -595,7 +586,7 @@ class WeatherExt extends PanelMenu.Button {
 
     get city() {
         let cities = this.cities.split(" && ");
-        if (cities && typeof cities == "string") {
+        if (cities && typeof cities === "string") {
             cities = [cities];
         }
 
@@ -740,7 +731,7 @@ class WeatherExt extends PanelMenu.Button {
         } else {
             key = this.settings.get_string('appid');
         }
-        return (key.length == 32) ? key : '';
+        return (key.length === 32) ? key : '';
     }
 
     createButton(iconName, accessibleName) {
@@ -805,7 +796,7 @@ class WeatherExt extends PanelMenu.Button {
 
         let cities = this.cities;
         cities = cities.split(" && ");
-        if (cities && typeof cities == "string") {
+        if (cities && typeof cities === "string") {
             cities = [cities];
         }
 
@@ -816,7 +807,7 @@ class WeatherExt extends PanelMenu.Button {
         for (let i = 0; cities.length > i; i++) {
             item = new PopupMenu.PopupMenuItem(this.extractLocation(cities[i]));
             item.location = i;
-            if (i == this.actualCity) {
+            if (i === this.actualCity) {
                 item.setOrnament(PopupMenu.Ornament.DOT);
             }
 
@@ -825,7 +816,7 @@ class WeatherExt extends PanelMenu.Button {
             item.activate = this.onActivate;
         }
 
-        if (cities.length == 1) {
+        if (cities.length === 1) {
             this.selectCity.actor.hide();
         } else {
             this.selectCity.actor.show();
@@ -845,7 +836,7 @@ class WeatherExt extends PanelMenu.Button {
             return "";
         }
 
-        if (arguments[0].search(">") == -1) {
+        if (arguments[0].search(">") === -1) {
             return _("Invalid city");
         }
 
@@ -859,11 +850,11 @@ class WeatherExt extends PanelMenu.Button {
     extractCoord() {
         let coords = 0;
 
-        if (arguments[0] && (arguments[0].search(">") != -1)) {
+        if (arguments[0] && (arguments[0].search(">") !== -1)) {
             coords = arguments[0].split(">")[0].replace(' ', '');
         }
 
-        if ((coords.search(",") == -1) || isNaN(coords.split(",")[0]) || isNaN(coords.split(",")[1])) {
+        if ((coords.search(",") === -1) || isNaN(coords.split(",")[0]) || isNaN(coords.split(",")[1])) {
             Main.notify("OpenWeather", _("Invalid location! Please try to recreate it."));
             return 0;
         }
@@ -904,7 +895,7 @@ class WeatherExt extends PanelMenu.Button {
         if (!this.isForecastDisabled && this.currentForecast !== undefined)
             this.currentForecast.set_width(this.currentWeather.get_width());
 
-        if (!this.isForecastDisabled && this.forecastDays != 0 && this.forecastExpander !== undefined) {
+        if (!this.isForecastDisabled && this.forecastDays !== 0 && this.forecastExpander !== undefined) {
             this.forecastScrollBox.set_width(this.forecastExpanderBox.get_width() - this.daysBox.get_width());
             this.forecastScrollBox.show();
             this.forecastScrollBox.hscroll.show();
@@ -933,16 +924,16 @@ class WeatherExt extends PanelMenu.Button {
 
     checkAlignment() {
         let menuAlignment = 1.0 - (this.menuAlignment / 100);
-        if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL)
+        if (Clutter.get_default_text_direction() === Clutter.TextDirection.RTL)
             menuAlignment = 1.0 - menuAlignment;
         this.menu._arrowAlignment=menuAlignment;
     }
 
     checkPositionInPanel() {
         if (
-            this.oldPositionInPanel == undefined
-            || this.oldPositionInPanel != this.positionInPanel
-            || this.firstRun || this.oldPositionIndex != this.positionIndex
+            this.oldPositionInPanel === undefined
+            || this.oldPositionInPanel !== this.positionInPanel
+            || this.firstRun || this.oldPositionIndex !== this.positionIndex
         ) {
             this.get_parent().remove_actor(this);
 

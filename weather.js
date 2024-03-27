@@ -93,7 +93,7 @@ async function refreshWeatherData() {
     }
     const owmCurrentUrl = 'https://api.openweathermap.org/data/2.5/weather';
     try {
-        json = await this.loadJsonAsync(owmCurrentUrl, params)
+        json = await WeatherUtils.loadJsonAsync(owmCurrentUrl, params)
             .then(async (json) => {
                 try {
                     this.currentWeatherCache = json;
@@ -139,7 +139,7 @@ async function refreshForecastData() {
     }
     const owmForecastUrl = 'https://api.openweathermap.org/data/2.5/forecast';
     try {
-        json = await this.loadJsonAsync(owmForecastUrl, params)
+        json = await WeatherUtils.loadJsonAsync(owmForecastUrl, params)
             .then(async (json) => {
                 processing: try {
 
@@ -217,7 +217,7 @@ function populateCurrentUI() {
             let now             = new Date();
             let lastBuild      = '-';
 
-            if (this.clockFormat == "24h") {
+            if (this.clockFormat === "24h") {
                 sunrise     = sunrise.toLocaleTimeString([this.locale], { hour12: false });
                 sunset      = sunset.toLocaleTimeString([this.locale], { hour12: false });
                 lastBuild   = now.toLocaleTimeString([this.locale], { hour12: false });
@@ -247,7 +247,7 @@ function populateCurrentUI() {
 
             this.currentWeatherSummary.text = comment + _(", ") + temperature;
 
-            if (this.locLenCurrent != 0 && location.length > this.locLenCurrent) {
+            if (this.locLenCurrent !== 0 && location.length > this.locLenCurrent) {
                 this.currentWeatherLocation.text = location.substring(0, (this.locLenCurrent - 3)) + "...";
             } else {
                 this.currentWeatherLocation.text = location;
@@ -270,14 +270,14 @@ function populateCurrentUI() {
             this.currentWeatherSunset.text      = sunset;
             this.currentWeatherBuild.text       = lastBuild;
 
-            if (json.wind != undefined && json.wind.deg != undefined) {
+            if (json.wind !== undefined && json.wind.deg !== undefined) {
                 this.currentWeatherWind.text = WeatherUtils.formatWind(json.wind.speed,
                     WeatherUtils.getWindDirection(json.wind.deg, this.windDirection),
                     this.decimalPlaces,
                     this.windSpeedUnits
                 );
 
-                if (json.wind.gust != undefined) {
+                if (json.wind.gust !== undefined) {
                     this.currentWeatherWindGusts.text = WeatherUtils.formatWind(json.wind.gust);
                 }
 
@@ -316,7 +316,7 @@ function populateTodaysUI() {
                     comment = WeatherUtils.getWeatherCondition(forecastDataToday.weather[0].id);
                 }
 
-                if (this.clockFormat == "24h") {
+                if (this.clockFormat === "24h") {
                     forecastTime = forecastTime.toLocaleTimeString([this.locale], { hour12: false });
                     forecastTime = forecastTime.substring(0, forecastTime.length -3);
                 } else {
@@ -360,7 +360,7 @@ function populateForecastUI() {
                         let beginOfDay = new Date(new Date().setHours(0, 0, 0, 0));
                         let dayLeft = Math.floor((forecastDate.getTime() - beginOfDay.getTime()) / 86400000);
 
-                        if (dayLeft == 1) {
+                        if (dayLeft === 1) {
                             forecastUi.Day.text = '\n'+_("Tomorrow");
                         } else {
                             forecastUi.Day.text = '\n' + WeatherUtils.getLocaleDay(forecastDate.getDay());
@@ -376,7 +376,7 @@ function populateForecastUI() {
                         comment = WeatherUtils.getWeatherCondition(forecastData[j].weather[0].id);
                     }
 
-                    if (this.clockFormat == "24h") {
+                    if (this.clockFormat === "24h") {
                         forecastDate = forecastDate.toLocaleTimeString([this.locale], { hour12: false });
                         forecastDate = forecastDate.substring(0, forecastDate.length -3);
                     }
@@ -451,7 +451,7 @@ function processForecastData(json) {
                     continue;
                 }
 
-                if (_this == last) {
+                if (_this === last) {
                     // Add item to current day
                     sortedList[a].push(data[i]);
                 } else {

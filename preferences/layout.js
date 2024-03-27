@@ -297,7 +297,7 @@ var Layout = GObject.registerClass(
         }
         disableForecastChanged() {
             let disableForecast = this.settings.get_boolean('disable-forecast');
-            if (this.disableForecast != disableForecast) {
+            if (this.disableForecast !== disableForecast) {
                 this.disableForecast = disableForecast;
                 return true;
             }
@@ -305,7 +305,7 @@ var Layout = GObject.registerClass(
         }
         providerTranslationsChanged() {
             let providerTranslations = this.settings.get_boolean('owm-api-translate');
-            if (this.providerTranslations != providerTranslations) {
+            if (this.providerTranslations !== providerTranslations) {
                 this.providerTranslations = providerTranslations;
                 return true;
             }
